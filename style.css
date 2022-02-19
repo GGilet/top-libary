@@ -253,15 +253,11 @@ body {
 
 .book-title h4 {
 	overflow: hidden;
-	white-space: pre-wrap;
+	white-space: nowrap;
 	text-overflow: ellipsis;
 	max-width: 260px;
 }
 
-.book-title h4:hover {
-	overflow: visible;
-	max-width: fit-content;
-}
 .book-author {
 }
 
