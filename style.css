@@ -191,10 +191,6 @@ body {
 }
 
 .addbook-container {
-	background-color: var(--accent);
-	padding: 10px 30px;
-	border-radius: 10px;
-
 	display: flex;
 	cursor: pointer;
 }
@@ -287,6 +283,14 @@ body {
 
 /*Read Button & Delete Button */
 
+#addButton {
+	cursor: pointer;
+
+	background-color: var(--accent);
+	padding: 10px 30px;
+	border-radius: 10px;
+}
+
 #readButton {
 	cursor: pointer;
 	border-radius: 5px;
@@ -304,20 +308,14 @@ body {
 
 /* Form CSS */
 
-.form-container {
-	/* display: none; */
+.formContainer {
+	display: none;
 	position: fixed;
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.4);
 	left: 0;
 	top: 0;
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	overflow: auto;
-
 	font-family: var(--font);
 }
 
@@ -326,6 +324,8 @@ body {
 	padding: 20px 10px;
 	width: 400px;
 	border: 10px solid rgba(0, 0, 0, 0.25);
+
+	margin: 23% auto;
 
 	/* display: flex; */
 }
@@ -454,3 +454,5 @@ label {
 	-moz-transition: All 0.3s ease;
 	-o-transition: All 0.3s ease;
 }
+
+/* Form Popup */

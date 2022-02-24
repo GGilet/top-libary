@@ -21,9 +21,7 @@
 					</h1>
 					<div class="counter-add-container">
 						<div class="addbook-container">
-							<button type="submit">
-								<span class="material-icons"> add </span> Add Book
-							</button>
+							<button type="button" id="addButton"><p>Add Book</p></button>
 						</div>
 						<div class="book-counter">
 							<h2>Book Counter</h2>
@@ -31,61 +29,10 @@
 						</div>
 					</div>
 				</div>
-				<div class="library-card-container">
-					<div class="library-card">
-						<div class="book-title">
-							<button id="readButton">
-								<span class="material-icons"> done_all </span>
-							</button>
-							<h4>Book Title</h4>
-							<button id="deleteButton">
-								<span class="material-icons"> highlight_off </span>
-							</button>
-						</div>
-						<div class="library-card-content">
-							<div class="book-author">
-								<h3>Author</h3>
-								<span id="author">Author Name</span>
-							</div>
-							<div class="book-release-date">
-								<h3>Release Date</h3>
-								<span id="releaseDate">Release Date</span>
-							</div>
-							<div class="book-pages">
-								<h3>Pages</h3>
-								<span id="releaseDate">120</span>
-							</div>
-						</div>
-					</div>
-					<div class="library-card">
-						<div class="book-title">
-							<button id="readButton">
-								<span class="material-icons"> done_all </span>
-							</button>
-							<h4>Longer Book Title To Test</h4>
-							<button id="deleteButton">
-								<span class="material-icons"> highlight_off </span>
-							</button>
-						</div>
-						<div class="library-card-content">
-							<div class="book-author">
-								<h3>Author</h3>
-								<span id="author">Author Name</span>
-							</div>
-							<div class="book-release-date">
-								<h3>Release Date</h3>
-								<span id="releaseDate">Release Date</span>
-							</div>
-							<div class="book-pages">
-								<h3>Pages</h3>
-								<span id="releaseDate">120</span>
-							</div>
-						</div>
-					</div>
-				</div>
+				<div class="library-card-container" id="cardContainer"></div>
 			</div>
 
-			<div class="form-container">
+			<div class="formContainer" id="formContainerID">
 				<div id="bookForm" class="bookWindow">
 					<form action="/" method="post" id="bookFormInputs">
 						<h2>Add Book</h2>
