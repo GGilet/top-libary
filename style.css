@@ -4,7 +4,7 @@
 	--accent: #368f8b;
 	--header-color: #df2935;
 
-	--library-card-size: 11em;
+	--library-card-size: 9em;
 	--library-card-width: fit-content;
 	--library-card-height: 6em;
 
@@ -218,6 +218,7 @@ body {
 	padding: 20px;
 	display: flex;
 	/* flex-grow: 1; */
+	flex-wrap: wrap;
 	gap: 20px;
 	height: fit-content;
 }
@@ -229,6 +230,9 @@ body {
 
 	max-height: var(--library-card-height);
 	min-height: var(--library-card-height);
+
+	max-width: var(--library-card-size);
+	min-width: var(--library-card-size);
 
 	display: flex;
 	flex-direction: column;
@@ -261,12 +265,12 @@ body {
 	border-bottom: 1px solid var(--accent);
 	padding: 10px 20px;
 	text-align: center;
-	font-size: 0.5em;
+	font-size: 0.45em;
 	font-weight: 600;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	gap: 30px;
+	gap: 5px;
 
 	/* backgc */
 }
@@ -275,7 +279,7 @@ body {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	max-width: 260px;
+	max-width: 280px;
 }
 
 .book-author {

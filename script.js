@@ -1,11 +1,5 @@
-let userLibrary = [];
+let userLibrary = JSON.parse(localStorage.getItem('Book') || '[]');
 
-// try {
-// 	userLibrary = [localStorage.getItem(userLibrary)];
-// } catch (error) {
-// 	userLibrary = [];
-// 	console.log(userLibrary);
-// }
 const button = document.getElementById('button');
 const addBookButton = document.getElementById('addButton');
 const form = document.getElementById('bookFormInputs');
@@ -18,6 +12,8 @@ let bookReleaseYear = '';
 let bookPages = '';
 let isRead = false;
 let userBook;
+
+displayCards();
 
 function Book(title, author, releaseYear, pages, isRead) {
 	this.title = title;
@@ -43,13 +39,12 @@ function addBookToLibrary() {
 	);
 
 	userLibrary.push(userBook);
-	localStorage.setItem('Book', userLibrary);
+	localStorage.setItem('Book', JSON.stringify(userLibrary));
 }
 
 button.addEventListener('click', () => {
 	addBookToLibrary();
 	displayCards();
-	console.log(userLibrary);
 });
 
 addBookButton.addEventListener('click', () => {
@@ -64,47 +59,39 @@ window.onclick = function (event) {
 
 function displayCards() {
 	cardContainer.replaceChildren();
-	if (userLibrary.length == null) {
-		return 0;
-	} else {
-		for (let i = 0; i < userLibrary.length; i++) {
-			bookAuthor = userLibrary[i].author;
-			bookTitle = userLibrary[i].title;
-			bookReleaseYear = userLibrary[i].releaseYear;
-			bookPages = userLibrary[i].pages;
-
-			const cardTemplate = `<div class="library-card">
-								<div class="book-title">
-									<button id="readButton">
-										<span class="material-icons" > done_all </span>
-									</button>
-									<h4>${bookTitle}</h4>
-									<button id="deleteButton">
-										<span class="material-icons"> highlight_off </span>
-									</button>
-								</div>
-								<div class="library-card-content">
-									<div class="book-author">
-										<h3>Author</h3>
-										<span id="author">${bookAuthor}</span>
+	for (let i = 0; i < userLibrary.length; i++) {
+		bookAuthor = userLibrary[i].author;
+		bookTitle = userLibrary[i].title;
+		bookReleaseYear = userLibrary[i].releaseYear;
+		bookPages = userLibrary[i].pages;
+		const cardTemplate = `<div class="library-card">
+									<div class="book-title">
+										<button id="readButton">
+											<span class="material-icons" > done_all </span>
+										</button>
+										<h4 title="${bookTitle}">${bookTitle}</h4>
+										<button id="deleteButton">
+											<span class="material-icons"> highlight_off </span>
+										</button>
 									</div>
-									<div class="book-release-date">
-										<h3>Release Date</h3>
-										<span id="releaseDate">${bookReleaseYear}</span>
+									<div class="library-card-content">
+										<div class="book-author">
+											<h3>Author</h3>
+											<span id="author">${bookAuthor}</span>
+										</div>
+										<div class="book-release-date">
+											<h3>Release Date</h3>
+											<span id="releaseDate">${bookReleaseYear}</span>
+										</div>
+										<div class="book-pages">
+											<h3>Pages</h3>
+											<span id="releaseDate">${bookPages}</span>
+										</div>
 									</div>
-									<div class="book-pages">
-										<h3>Pages</h3>
-										<span id="releaseDate">${bookPages}</span>
-									</div>
-								</div>
-								</div>`;
+									</div>`;
 
-			const libraryDiv = document.createElement('div');
-			// libraryDiv.classList.add('library-card');
-
-			libraryDiv.innerHTML = cardTemplate;
-
-			cardContainer.appendChild(libraryDiv);
-		}
+		const libraryDiv = document.createElement('div');
+		libraryDiv.innerHTML = cardTemplate;
+		cardContainer.appendChild(libraryDiv);
 	}
 }
