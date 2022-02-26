@@ -310,6 +310,13 @@ body {
 	font-size: 2em;
 }
 
+.bookIsRead {
+	color: rgb(110, 219, 110);
+}
+
+.bookIsNotRead {
+	color: #d7d7d7;
+}
 /* Form CSS */
 
 .formContainer {
