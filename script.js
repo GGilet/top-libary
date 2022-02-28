@@ -47,91 +47,13 @@ function addBookToLibrary() {
 
 	userLibrary.push(userBook);
 	setBookToLocalStorage();
+	readButtonListeners();
 }
-
-/* On Click Events */
-
-button.addEventListener('click', () => {
-	addBookToLibrary();
-	displayCards();
-});
-
-addBookButton.addEventListener('click', () => {
-	document.getElementById('formContainerID').style.display = 'block';
-});
-
-window.onclick = function (event) {
-	if (event.target.className === 'formContainer') {
-		event.target.style.display = 'none';
-	}
-};
-
-let readButtons = document.querySelectorAll('#readButton');
-
-// readButtons.forEach(function (e) {
-// 	e = this;
-// 	console.log(e.target);
-// });
-
-// let index = 0;
-// for (let i = 0; i < userLibrary.length; i++) {
-
-function changeReadStatusAndIndexButtons() {
-	console.log('1');
-	index = readButton.getAttribute('index');
-	if (userLibrary[index].isRead == false) {
-		userLibrary[index].isRead = true;
-		setBookToLocalStorage();
-		console.log(JSON.parse(localStorage.getItem('Book') || '[]'));
-	} else {
-		userLibrary[index].isRead = false;
-		setBookToLocalStorage();
-		console.log(JSON.parse(localStorage.getItem('Book') || '[]'));
-	}
-	// console.log(e.currentTarget);
-	displayCards();
-}
-
-readButton.addEventListener('click', () => {
-	console.log('test');
-});
-
-readButton.addEventListener('click', () => {
-	changeReadStatusAndIndexButtons();
-});
-
-// }
-
-// function toggleReadStatus(e, el) {
-// 	e = e || window.event;
-// 	// console.log(e.target);
-// 	// console.log(this);
-// 	// console.log(el);
-// }
-// readButtons.forEach((readButton) => {
-// 	readButton.addEventListener('click', () => {
-// 		console.log('I clicked');
-// 	});
-// });
-// function displayReadStatus() {
-// 	let readOrNot = document.getElementsByClassName('.readStatus');
-
-// 	for (let i = 0; i < userLibrary.length; i++) {
-// 		readOrNot[i].style.color = 'blue';
-// 	}
-// }
-
-// userLibrary.forEach((readButton) => {
-// 	readButtons.forEach((readButton) => {
-// 		readButton.addEventListener('click', () => {
-// 			console.log(userLibrary.from(readButtons).indexOf(event.target))
-// 		});
-// 	});
-// });
-
 function displayCards() {
+	buttonIndex = 0;
 	cardContainer.replaceChildren();
 	userLibrary = JSON.parse(localStorage.getItem('Book') || '[]');
+
 	for (let i = 0; i < userLibrary.length; i++) {
 		bookAuthor = userLibrary[i].author;
 		bookTitle = userLibrary[i].title;
@@ -139,19 +61,14 @@ function displayCards() {
 		bookPages = userLibrary[i].pages;
 		isRead = userLibrary[i].isRead;
 
-		if (isRead == true) {
-			readStatus = 'bookIsRead';
-		} else {
-			readStatus = 'bookIsNotRead';
-		}
 		const cardTemplate = `<div class="library-card">
 									<div class="book-title">
-										<button id="readButton" index="${buttonIndex}">
-											<span onclick=""class="material-icons ${readStatus}" > done_all </span>
+										<button id="readButton">
+											<span id="readIcon" index="${buttonIndex}" class="material-icons bookIsRead bookIsNotRead" > done_all </span>
 										</button>
 										<h4 title="${bookTitle}">${bookTitle}</h4>
 										<button id="deleteButton">
-											<span class="material-icons "> highlight_off </span>
+											<span id="deleteIcon" index="${buttonIndex}" class="material-icons "> highlight_off </span>
 										</button>
 									</div>
 									<div class="library-card-content">
@@ -168,14 +85,77 @@ function displayCards() {
 											<span id="releaseDate">${bookPages}</span>
 										</div>
 									</div>
-									</div>`;
+								</div>`;
 
 		const libraryDiv = document.createElement('div');
 		libraryDiv.innerHTML = cardTemplate;
 
+		let readButtonChildren =
+			libraryDiv.firstElementChild.firstElementChild.firstElementChild
+				.firstElementChild;
+
+		if (isRead == true) {
+			readButtonChildren.classList.toggle('bookIsNotRead');
+		} else {
+			readButtonChildren.classList.toggle('bookIsRead');
+		}
 		cardContainer.appendChild(libraryDiv);
 		buttonIndex++;
 	}
-	buttonIndex = 0;
 }
-// getReadBookStatus();
+/* On Click Events */
+
+button.addEventListener('click', () => {
+	addBookToLibrary();
+	displayCards();
+	readButtonListeners();
+	deleteButtonListeners();
+});
+
+addBookButton.addEventListener('click', () => {
+	document.getElementById('formContainerID').style.display = 'block';
+});
+
+window.onclick = function (event) {
+	if (event.target.className === 'formContainer') {
+		event.target.style.display = 'none';
+	}
+};
+
+let readButtons = document.querySelectorAll('#readButton');
+
+function readButtonListeners() {
+	let readIcons = document.querySelectorAll('#readIcon');
+	for (let i = 0; i < readIcons.length; i++) {
+		let toggleButton = readIcons.item(i);
+		toggleButton.addEventListener('click', () => {
+			toggleButton.classList.toggle('bookIsRead');
+			toggleButton.classList.toggle('bookIsNotRead');
+
+			if (userLibrary[i].isRead == false) {
+				userLibrary[i].isRead = true;
+				setBookToLocalStorage();
+			} else if (userLibrary[i].isRead == true) {
+				userLibrary[i].isRead = false;
+				setBookToLocalStorage();
+			}
+		});
+	}
+}
+
+function deleteButtonListeners() {
+	let deleteButtons = document.querySelectorAll('#deleteIcon');
+	for (let i = 0; i < deleteButtons.length; i++) {
+		let toggleButton = deleteButtons.item(i);
+		toggleButton.addEventListener('click', () => {
+			userLibrary.splice(i, 1);
+			setBookToLocalStorage();
+			displayCards();
+			deleteButtonListeners();
+			readButtonListeners();
+		});
+	}
+}
+
+readButtonListeners();
+deleteButtonListeners();
