@@ -5,6 +5,10 @@ const addBookButton = document.getElementById('addButton');
 const form = document.getElementById('bookFormInputs');
 const formContainer = document.getElementsByClassName('.form-container');
 const cardContainer = document.getElementById('cardContainer');
+const bookCounter = document.getElementById('bookCounter');
+
+const totalBooksContainer = document.getElementById('totalBooks');
+const completedBooksContainer = document.getElementById('completedBooks');
 
 let bookTitle = '';
 let bookAuthor = '';
@@ -15,6 +19,16 @@ let userBook;
 let readStatus;
 let buttonIndex = 0;
 let index;
+
+let completedBooks;
+let totalBooks;
+
+let incorrectTitle = document.querySelector('.incorrectTitle');
+let incorrectAuthor = document.querySelector('.incorrectAuthor');
+let incorrectReleaseYear = document.querySelector('.incorrectReleaseYear');
+let incorrectPages = document.querySelector('.incorrectPages');
+
+let incorrectMessage = document.createElement('p');
 
 displayCards();
 
@@ -31,26 +45,95 @@ function setBookToLocalStorage() {
 }
 
 function addBookToLibrary() {
-	bookTitle = form.bookTitle.value;
-	bookAuthor = form.bookAuthor.value;
-	bookReleaseYear = form.bookReleaseYear.value;
-	bookPages = form.bookPages.value;
-	isRead = form.isRead.checked;
+	if (checkValidation() == false) {
+		return;
+	} else {
+		bookTitle = form.bookTitle.value;
+		bookAuthor = form.bookAuthor.value;
+		bookReleaseYear = form.bookReleaseYear.value;
+		bookPages = form.bookPages.value;
+		isRead = form.isRead.checked;
 
-	userBook = new Book(
-		bookTitle,
-		bookAuthor,
-		bookReleaseYear,
-		bookPages,
-		isRead
-	);
+		userBook = new Book(
+			bookTitle,
+			bookAuthor,
+			bookReleaseYear,
+			bookPages,
+			isRead
+		);
 
-	userLibrary.push(userBook);
-	setBookToLocalStorage();
-	readButtonListeners();
+		userLibrary.push(userBook);
+		setBookToLocalStorage();
+		readButtonListeners();
+	}
 }
+
+function resetForm() {
+	form.bookTitle.value = '';
+	form.bookAuthor.value = '';
+	form.bookReleaseYear.value = '';
+	form.bookPages.value = '';
+	form.isRead.checked = false;
+}
+
+/* Validation */
+
+function checkValidation() {
+	if (
+		checkBookTitle() == false ||
+		checkBookAuthor() == false ||
+		checkBookReleaseDate() == false ||
+		checkBookPages() == false
+	) {
+		return false;
+	} else return true;
+}
+
+function checkBookTitle() {
+	if (form.bookTitle.value == '') {
+		incorrectMessage.textContent = '* Book title cannot be blank';
+		incorrectTitle.appendChild(incorrectMessage);
+		incorrectTitle.style.color = 'red';
+		incorrectTitle.style.textTransform = 'lowercase';
+		return false;
+	} else return true;
+}
+
+function checkBookAuthor() {
+	if (form.bookAuthor.value == '') {
+		incorrectMessage.textContent = '* Author cannot be blank';
+		incorrectAuthor.appendChild(incorrectMessage);
+		incorrectAuthor.style.color = 'red';
+		incorrectAuthor.style.textTransform = 'lowercase';
+
+		return false;
+	} else return true;
+}
+
+function checkBookReleaseDate() {
+	if (form.bookReleaseYear.value == '') {
+		incorrectMessage.textContent = '* Release Date cannot be blank';
+		incorrectReleaseYear.appendChild(incorrectMessage);
+		incorrectReleaseYear.style.color = 'red';
+		incorrectReleaseYear.style.textTransform = 'lowercase';
+		return false;
+	} else return true;
+}
+
+function checkBookPages() {
+	if (form.bookPages.value == '') {
+		incorrectMessage.textContent = '* Pages cannot be blank';
+		incorrectPages.appendChild(incorrectMessage);
+		incorrectPages.style.color = 'red';
+		incorrectPages.style.textTransform = 'lowercase';
+		return false;
+	} else return true;
+}
+
 function displayCards() {
 	buttonIndex = 0;
+	totalBooks = 0;
+	completedBooks = 0;
 	cardContainer.replaceChildren();
 	userLibrary = JSON.parse(localStorage.getItem('Book') || '[]');
 
@@ -60,6 +143,10 @@ function displayCards() {
 		bookReleaseYear = userLibrary[i].releaseYear;
 		bookPages = userLibrary[i].pages;
 		isRead = userLibrary[i].isRead;
+
+		if (isRead == true) {
+			completedBooks++;
+		}
 
 		const cardTemplate = `<div class="library-card">
 									<div class="book-title">
@@ -102,14 +189,27 @@ function displayCards() {
 		cardContainer.appendChild(libraryDiv);
 		buttonIndex++;
 	}
+
+	updateBookCounter();
 }
+
+function updateBookCounter() {
+	totalBooks = buttonIndex;
+	totalBooksContainer.innerText = totalBooks;
+	completedBooksContainer.innerText = completedBooks;
+}
+
 /* On Click Events */
 
 button.addEventListener('click', () => {
+	if (checkValidation()) {
+		document.getElementById('formContainerID').style.display = 'none';
+	}
 	addBookToLibrary();
 	displayCards();
 	readButtonListeners();
 	deleteButtonListeners();
+	resetForm();
 });
 
 addBookButton.addEventListener('click', () => {
@@ -135,9 +235,15 @@ function readButtonListeners() {
 			if (userLibrary[i].isRead == false) {
 				userLibrary[i].isRead = true;
 				setBookToLocalStorage();
+				displayCards();
+				readButtonListeners();
+				deleteButtonListeners();
 			} else if (userLibrary[i].isRead == true) {
 				userLibrary[i].isRead = false;
 				setBookToLocalStorage();
+				displayCards();
+				readButtonListeners();
+				deleteButtonListeners();
 			}
 		});
 	}
@@ -148,11 +254,19 @@ function deleteButtonListeners() {
 	for (let i = 0; i < deleteButtons.length; i++) {
 		let toggleButton = deleteButtons.item(i);
 		toggleButton.addEventListener('click', () => {
-			userLibrary.splice(i, 1);
-			setBookToLocalStorage();
-			displayCards();
-			deleteButtonListeners();
-			readButtonListeners();
+			if (
+				confirm(
+					'Are you sure you want to delete ' +
+						userLibrary[i].title +
+						' from your library?'
+				) == true
+			) {
+				userLibrary.splice(i, 1);
+				setBookToLocalStorage();
+				displayCards();
+				deleteButtonListeners();
+				readButtonListeners();
+			}
 		});
 	}
 }

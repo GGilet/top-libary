@@ -19,14 +19,17 @@
 					<h1 class="header">
 						<span class="material-icons"> library_books </span> Library
 					</h1>
-					<div class="counter-add-container">
-						<div class="addbook-container">
-							<button type="button" id="addButton"><p>Add Book</p></button>
-						</div>
-						<div class="book-counter">
-							<h2>Book Counter</h2>
-							<span>0</span>
-						</div>
+
+					<div class="addbook-container">
+						<button type="button" id="addButton"><p>Add Book</p></button>
+					</div>
+					<div class="book-counter">
+						<h2>Book Counter</h2>
+						<span id="bookCounter">
+							<span id="completedBooks">0</span>
+							/
+							<span id="totalBooks">0</span>
+						</span>
 					</div>
 				</div>
 				<div class="library-card-container" id="cardContainer"></div>
@@ -35,29 +38,27 @@
 			<div class="formContainer" id="formContainerID">
 				<div id="bookForm" class="bookWindow">
 					<form action="/" method="post" id="bookFormInputs">
-						<h2>Add Book</h2>
-
 						<label for="bookTitle"
-							>Book Tile
-							<input type="text" name="bookTitle" id="" />
+							><p>Book Tile</p>
+							<input type="text" name="bookTitle" id="bookTitle" />
+							<span class="incorrectTitle"></span>
 						</label>
 
 						<label for="bookAuthor"
-							>Author
+							><p>Author</p>
 							<input type="text" name="bookAuthor" id="bookAuthor" />
+							<span class="incorrectAuthor"></span>
 						</label>
 
 						<label for="bookReleaseYear"
-							>Release Year
-							<input
-								type="number"
-								name="bookReleaseYear"
-								id="bookReleaseYear"
-							/>
+							><p>Release Year</p>
+							<input type="date" name="bookReleaseYear" id="bookReleaseYear" />
+							<span class="incorrectReleaseYear"></span>
 						</label>
 						<label for="bookPages"
-							>Pages
-							<input type="number" name="bookPages" id="bookPages" />
+							><p>Pages</p>
+							<input type="text" name="bookPages" id="bookPages" />
+							<span class="incorrectPages"></span>
 						</label>
 
 						<label class="switch">
